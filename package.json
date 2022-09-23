@@ -2,7 +2,7 @@
   "name": "rest_node",
   "version": "1.0.0",
   "description": "This Is Project On Rest APIs",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon app.js"
