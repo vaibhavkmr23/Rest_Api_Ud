@@ -1,6 +1,17 @@
 exports.getPosts = (req, res, next) => {
     res.status(200)
-        .json({ posts: [{ title: 'First Post', content: 'This is the First Post!!' }] })
+        .json({ posts: [{ 
+            _id: '1',
+            title: 'First Post', 
+            content: 'This is the First Post!!',
+            creator: {
+                name: "Vaibhav"
+            },
+            createdAt: new Date(),
+            imageUrl: 'images/IMG_6597.jpg'
+         
+        }] })
+        console.log("Response is",res.json);
 };
 
 exports.createPost = (req, res, next) =>{
