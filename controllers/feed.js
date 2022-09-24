@@ -11,7 +11,7 @@ exports.getPosts = (req, res, next) => {
             imageUrl: 'images/IMG_6597.jpg'
          
         }] })
-        console.log("Response is",res.json);
+        // console.log("Response is",res.json);
 };
 
 exports.createPost = (req, res, next) =>{
@@ -23,8 +23,13 @@ exports.createPost = (req, res, next) =>{
     res.status(201).json({
         message: 'Post Created Successfully!',
         post: { 
-            // id: new Date().toISOString, 
+            _id: new Date().toISOString, 
             title: title, 
-            content: content }
+            content: content,
+            creator: {
+                name: 'Vaibhav'
+            },
+            createdAt: new Date()
+         }
     })
 }
