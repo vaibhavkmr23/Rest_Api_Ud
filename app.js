@@ -3,6 +3,8 @@ const express = require('express');
 
 const app = express();
 
+const mongoose = require('mongoose');
+
 const cors = require('cors');
 
 const feedRoutes = require('./routes/feed');
@@ -23,4 +25,12 @@ app.use((req, res, next) =>{
 
 app.use('/feed',feedRoutes);
 
-app.listen(8080);
+mongoose.connect('mongodb+srv://Vaibhav:23101995@cluster0.gsxn3bf.mongodb.net/messages')
+.then(result =>{
+    app.listen(8080);
+    console.log("Connected");
+})
+.catch(err => {
+    console.log("Error is:", err)
+})
+
