@@ -11,6 +11,7 @@ const cors = require('cors');
 const multer = require("multer");
 
 const feedRoutes = require('./routes/feed');
+const authRoutes = require('./routes/auth');
 
 const bodyParser = require('body-parser');
 
@@ -54,6 +55,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/feed', feedRoutes);
+app.use('/auth', authRoutes);
 
 app.use((error, req, res, next) => {
     console.log(error);
