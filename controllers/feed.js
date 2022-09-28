@@ -72,7 +72,7 @@ exports.createPost = (req, res, next) => {
             res.status(201).json({
                 message: 'Post Created Successfully!',
                 post: post,
-                creator: { _id: creator._id, name: creator.name}
+                creator: { _id: creator._id, name: creator.name }
             })
         })
         .catch(err => {
@@ -132,6 +132,11 @@ exports.updatePost = (req, res, next) => {
                 error.statusCode = 404;
                 throw error;
             }
+            if (post.creator.toString() !== req.userId) {
+                const error = new Error('Not Authorized!!');
+                error.statusCode = 403;
+                throw error;
+            }
             if (imageUrl !== post.imageUrl) {
                 clearImage(post.imageUrl);
             }
@@ -158,6 +163,11 @@ exports.deletePost = (req, res, next) => {
             if (!post) {
                 const error = new Error("Could not find Post.");
                 error.statusCode = 404;
+                throw error;
+            }
+            if (post.creator.toString() !== req.userId) {
+                const error = new Error('Not Authorized!!');
+                error.statusCode = 403;
                 throw error;
             }
             // Check Logged in user
