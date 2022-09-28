@@ -9,17 +9,17 @@ exports.signup = (req, res, next) => {
     if (!errors.isEmpty()) {
         const error = new Error('Validation Failed!!...');
         error.statusCode = 422;
-        errors.data = errors.array();
+        error.data = errors.array();
         throw error;
     }
     const email = req.body.email;
     const name = req.body.name;
     const password = req.body.password;
 
-    bcrypt.hash(password, 12).then(hasedPw => {
+    bcrypt.hash(password, 12).then(hashedPw => {
         const user = new User({
             email: email,
-            password: hasedPw,
+            password: hashedPw,
             name: name
         })
         return user.save();
