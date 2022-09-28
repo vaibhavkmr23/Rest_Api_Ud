@@ -23,13 +23,44 @@ exports.signup = (req, res, next) => {
         })
         return user.save();
     })
-    .then(result =>{
-        res.status(201).json({ message: 'user created!', usedId: result._id})
-    })
-    .catch(err => {
-        if (!err.statusCode) {
-            err.statusCode = 500;
-        }
-        next(err);
-    })
+        .then(result => {
+            res.status(201).json({ message: 'user created!', usedId: result._id })
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        })
+}
+
+exports.login = (req, res, next) => {
+    const email = req.body.email;
+    const password = req.body.password;
+    let loadedUser
+
+    User.findOne({ email: email })
+        .then(user => {
+            if (!user) {
+                const error = new Error('A user with this email was not Found!!');
+                error.statusCode = 401;
+                throw error;
+            }
+            loadedUser = user;
+            return bcrypt.compare(password, user.password);
+        })
+        .then(isEqual => {
+            if (!isEqual) {
+                const error = new Error('Enter the correct password');
+                error.statusCode = 401;
+                throw error;
+            }
+            res.status(200).json({ message: " Successfully LoggedIn" });
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        })
 }
