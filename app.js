@@ -67,10 +67,20 @@ app.use((error, req, res, next) => {
 
 mongoose.connect('mongodb+srv://Vaibhav:23101995@cluster0.gsxn3bf.mongodb.net/messages')
     .then(result => {
+        // const server = app.listen(8080);
+        // const io = require('socket.io')(server);
+        // io.on('connection', socket => {
+        //     console.log("Client Connected");
+        // });
         const server = app.listen(8080);
-        const io = require('socket.io')(server);
-        io.on('connection', socket => {
-            console.log("Client Connected");
+        const io = require("socket.io")(server, {
+            cors: {
+                // origin: "http://localhost:3000",
+                // methods: ["GET", "POST"],
+            },
+        });
+        io.on("connection", (socket) => {
+            console.log("client connected");
         });
     })
     .catch(err => {
