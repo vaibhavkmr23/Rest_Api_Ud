@@ -6,31 +6,29 @@ const { validationResult } = require('express-validator/check');
 const Post = require('../models/post');
 const User = require('../models/user');
 
-exports.getPosts = (req, res, next) => {
+exports.getPosts = async (req, res, next) => {
     const currentPage = req.query.page || 1;
     const perPage = 2;
     let totalItems;
-    Post.find()
-        .countDocuments()
-        .then(count => {
-            totalItems = count;
-            return Post.find()
-                .skip((currentPage - 1) * perPage)
-                .limit(perPage);
+    
+    // since  use of async await makes it look like synchornous so we use try and catch to catch the error
+    try {
+        // Use of await where used then function
+        totalItems = await Post.find().countDocuments() 
+        const posts = await Post.find().skip((currentPage - 1) * perPage)
+            .limit(perPage);
+        res.status(200).json({
+            message: "Fetched posts successfully!!",
+            posts: posts,
+            totalItems: totalItems
         })
-        .then(posts => {
-            res.status(200).json({
-                message: "Fetched posts successfully!!",
-                posts: posts,
-                totalItems: totalItems
-            })
-        })
-        .catch(err => {
-            if (!err.statusCode) {
-                err.statusCode = 500;
-            }
-            next(err);
-        })
+    }
+    catch (err) {
+        if (!err.statusCode) {
+            err.statusCode = 500;
+        }
+        next(err);
+    }
 };
 
 exports.createPost = (req, res, next) => {
@@ -178,7 +176,7 @@ exports.deletePost = (req, res, next) => {
         .then(result => {
             return User.findById(req.userId);
         })
-        .then(user =>{
+        .then(user => {
             user.posts.pull(postId);
             return user.save();
         })
