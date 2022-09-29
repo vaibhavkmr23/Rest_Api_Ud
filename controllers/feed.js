@@ -3,6 +3,7 @@ const path = require('path');
 
 const { validationResult } = require('express-validator/check');
 
+const io = require('../socket');
 const Post = require('../models/post');
 const User = require('../models/user');
 
@@ -37,10 +38,6 @@ exports.createPost = async (req, res, next) => {
         const error = new Error('Validation Failed..Entered Data is Incorrect!!');
         error.statusCode = 422;
         throw error;
-        // return res.status(422).json({
-        //     message: "Validation Failed, entered data is incorrect",
-        //     errors: errors.array()
-        // })
     }
     if (!req.file) {
         const error = new Error('No image provided!');
@@ -62,6 +59,7 @@ exports.createPost = async (req, res, next) => {
         const user = await User.findById(req.userId)
         user.posts.push(post);
         await user.save();
+        io.getIO().emit('posts', { action: 'create', post: post });
         res.status(201).json({
             message: 'Post Created Successfully!',
             post: post,
