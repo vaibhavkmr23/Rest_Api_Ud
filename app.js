@@ -74,10 +74,10 @@ mongoose.connect('mongodb+srv://Vaibhav:23101995@cluster0.gsxn3bf.mongodb.net/me
         // });
         const server = app.listen(8080);
         const io = require('./socket').init(server, {
-            cors: {
-                origin: "http://localhost:3000",
-                methods: ["GET", "POST", "PUT", "DELETE"],
-            },
+            // cors: {
+            //     origin: "http://localhost:3000",
+            //     methods: ["GET", "POST", "PUT", "DELETE"],
+            // },
         });
         io.on("connection", (socket) => {
             console.log("client connected");
